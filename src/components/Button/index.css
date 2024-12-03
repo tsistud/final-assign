@@ -1,0 +1,28 @@
+.my-button {
+    /* background-color: green; */
+    height: 40px;
+    min-width: 150px;
+    border-radius: 8;
+    border: none;
+    color: white;
+    cursor: pointer;
+
+    font-size: 10px;
+    transition: background 200ms ease-in-out;
+}
+
+.my-button:hover{
+    background: rgb(8, 196, 8);
+}
+
+.my-button--primary{
+    background: rgb(7, 219, 7);
+    border: none;
+    color: white;
+}
+
+.my-button-bordered {
+    background: none;
+    border: 1px solid rgb(11, 186, 11);
+    color: rgb(2, 64, 2);
+}
