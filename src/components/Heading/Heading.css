@@ -1,0 +1,30 @@
+.heading {
+    font-family: 'Inter', sans-serif;
+    margin: 16px 0;
+    font-weight: bold;
+  }
+  
+  .heading--1 {
+    font-size: 48px;
+  }
+  
+  .heading--2 {
+    font-size: 32px;
+  }
+  
+  .heading--3 {
+    font-size: 24px;
+  }
+  
+  .heading--4 {
+    font-size: 20px;
+  }
+  
+  .heading--5 {
+    font-size: 16px;
+  }
+  
+  .heading--6 {
+    font-size: 14px;
+  }
+  

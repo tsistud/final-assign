@@ -1,4 +1,5 @@
 .my-button {
+    font-family: 'Inter', sans-serif;
     height: 40px;
     min-width: 150px;
     border-radius: 8px;
@@ -7,43 +8,53 @@
     cursor: pointer;
     font-size: 10px;
     transition: background 200ms ease-in-out;
+    margin-right: 15px;
 }
 
 .my-button:hover{
-    background: rgb(8, 196, 8);
+    background: #044d9f;
 }
 
 .my-button--primary{
-    background: rgb(7, 219, 7);
+    background: #006FEE;
     border: none;
     color: white;
 }
 
+.my-button--primary:hover {
+    background-color: #044d9f;
+  }
+
 .my-button--bordered {
     background: none;
-    border: 1px solid rgb(11, 186, 11);
-    color: rgb(2, 64, 2);
+    border: 1px solid #006FEE;
+    color: #006FEE;
 }
 
 .my-button--bordered:hover {
-    background-color: rgb(11, 186, 11);
+    background-color: #044d9f;
     color: white;
 }
 
 .my-button--sm {
     min-width: 100px;
-    height: 30px;
-    font-size: 14px;
+    height: 32px;
+    font-size: 12px;
 }
 
 .my-button--md {
-    min-width: 150px;
+    min-width: 120px;
     height: 40px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .my-button--lg {
-    min-width: 200px;
-    height: 50px;
-    font-size: 22px;
+    min-width: 150px;
+    height: 48px;
+    font-size: 16px;
 }
+
+.my-button--disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
