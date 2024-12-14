@@ -1,98 +1,103 @@
 import Button from "./components/Button";
 import Input from "./components/Input/Input";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Typography from "./components/Typography/Typography";
 import Heading from "./components/Heading/Heading";
 import Tooltip from "./components/Tooltip/Tooltip";
 import Accordion from "./components/Accordion/Accordion";
 
 function App() {
-  const handleClick = (message) => {
-    alert(message);
+  const [cryptos, setCryptos] = useState([]);
+  const [filteredCryptos, setFilteredCryptos] = useState([]);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchCryptos();
+  }, []);
+
+  const fetchCryptos = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("https://api.coinlore.net/api/tickers/");
+      const data = await response.json();
+      setCryptos(data.data);
+      setFilteredCryptos(data.data);
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const [inputValue, setInputValue] = useState("");
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+  const handleUpdate = () => {
+    fetchCryptos();
+  };
+
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearch(query);
+    const filtered = cryptos.filter(
+      (crypto) =>
+        crypto.name.toLowerCase().includes(query) ||
+        crypto.symbol.toLowerCase().includes(query)
+    );
+    setFilteredCryptos(filtered);
+  };
+
+  const formatChange = (value) => {
+    const formattedValue = value > 0 ? `+${value}` : value;
+    const color = value > 0 ? "green" : "red";
+    return <span style={{ color }}>{formattedValue}%</span>;
   };
 
   
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
+    <Heading variant="h1">Cryptocurrency Prices</Heading>
+    <Button size="md" variant="bordered" onClick={handleUpdate}>
+      Update
+    </Button>
+    <br />
+    <br />
+    <Input
+      value={search}
+      onChange={handleSearch}
+      placeholder="Search"
+      size="md"
+    />
+
+    {loading ? (
+      <Typography variant="body1">Loading...</Typography>
+    ) : (
       <div>
-        <Button size="lg">lg, primary</Button>
-        <Button size="md">md, primary</Button>
-        <Button size="sm" onClick={() => handleClick("Primary Small clicked!")}>sm,primary</Button>
-        <br /> <br />
-        <Button variant="bordered" size="lg" disabled>lg, bordered</Button>
-        <Button variant="bordered" size="md" type="submit" onClick={() => handleClick("Form Submitted!")}>md, bordered</Button>
-        <Button variant="bordered" size="sm">sm, bordered</Button>
+        {filteredCryptos.map((crypto) => (
+          <Accordion
+            key={crypto.id}
+            title={crypto.name}
+            extra={`Symbol: ${crypto.symbol}`}
+          >
+            <Typography variant="body2"><b>Symbol:</b> {crypto.symbol}</Typography>
+            <Typography variant="body2"><b>Price USD:</b> {crypto.price_usd}</Typography>
+            <Typography variant="body2"><b>Price BTC:</b> {crypto.price_btc}</Typography>
+            <Typography variant="body2">
+              <Tooltip
+                text="The market capitalization of a cryptocurrency is calculated by multiplying the number of coins in circulation by the current price"
+              >
+                  <b >Market Cap USD:</b> 
+              </Tooltip>{" "}
+              {crypto.market_cap_usd}
+            </Typography>
+            <Typography
+              variant="body2"
+            >
+              <b>Percent Change 24H:</b> {formatChange(crypto.percent_change_24h)}
+            </Typography>
+          </Accordion>
+        ))}
       </div>
-
-      <div>
-      <Input 
-        label="Name" 
-        placeholder="Enter your name" 
-        value={"Ivan Ivanov"} 
-        onChange={handleInputChange} 
-      />
-
-      <Input 
-        label="Name" 
-        placeholder="Enter your name" 
-        value={"Focus"} 
-      />
-
-      <Input 
-        label="Name" 
-        placeholder="Enter your name" 
-        value={"Danger"} 
-        danger={true} 
-      />
-      </div>
-
-      <div>
-        <Typography textSize="sm">SM. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore <br /> et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea <br /> commodo consequat.</Typography>
-        <Typography textSize="md">MD. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor <br /> incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation <br /> ullamco laboris nisi ut aliquip ex ea commodo consequat.</Typography>
-        <Typography textSize="lg">LG. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod <br /> tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis <br /> nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</Typography>
-      </div>
-
-      <div>
-        <Heading level={1}>H1. Heading</Heading>
-        <Heading level={2}>H2. Heading</Heading>
-        <Heading level={3}>H3. Heading</Heading>
-        <Heading level={4}>H4. Heading</Heading>
-        <Heading level={5}>H5. Heading</Heading>
-        <Heading level={6}>H6. Heading</Heading>
-      </div>
-
-      <div className="tooltip-demo">
-        <Tooltip text="Top" position="top">
-          <div className="tooltip-target">Top tooltip</div>
-        </Tooltip>
-        <Tooltip text="Left" position="left">
-          <div className="tooltip-target">Left tooltip</div>
-        </Tooltip>
-        <Tooltip text="Right" position="right">
-          <div className="tooltip-target">Right tooltip</div>
-        </Tooltip>
-        <Tooltip text="Bottom" position="bottom">
-            <div className="tooltip-target">Bottom tooltip</div>
-        </Tooltip>
-      </div>
-
-
-      <div>
-        <Accordion title="Accordion 1" defaultOpen={true}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </Accordion>
-        <Accordion title="Accordion 2" defaultOpen={false}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-        </Accordion>
-      </div>
-    </div>
-
-    
+    )}
+  </div>
   );
 }
 
